@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { credenciaisConfiguradas, usuarioDaSessao } from '../_lib/auth'
+import { credenciaisConfiguradas, usuarioDaSessao } from '../../server/auth'
 
 export default function handler(_req: VercelRequest, res: VercelResponse) {
   if (!credenciaisConfiguradas()) return res.status(503).json({ erro: 'O login ainda não foi configurado na Vercel.' })
