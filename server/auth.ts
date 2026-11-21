@@ -64,5 +64,5 @@ export function exigirAdmin(req: VercelRequest, res: VercelResponse): string | n
 }
 
 export function credenciaisConfiguradas(): boolean {
-  return Boolean(process.env.GREMIO_LOGIN && process.env.GREMIO_PASSWORD && process.env.SESSION_SECRET?.length >= 32)
+  return Boolean(process.env.GREMIO_LOGIN && process.env.GREMIO_PASSWORD && (process.env.SESSION_SECRET?.length ?? 0) >= 32)
 }
