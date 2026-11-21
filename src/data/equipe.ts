@@ -12,6 +12,7 @@ export const equipe: Integrante[] = [
     cargo: 'Presidente',
     descricao: 'Coordena a gestão, representa o Grêmio, conduz as reuniões e acompanha o cumprimento do plano.',
     projetos: [],
+    foto: '/fotos-equipe/arthur-alves.gremio.jpeg',
   },
   {
     nome: 'Emili Baron',
@@ -49,6 +50,7 @@ export const equipe: Integrante[] = [
     cargo: 'Diretora de Esportes',
     descricao: 'Organiza as atividades esportivas e as duas edições do Interclasses.',
     projetos: ['Interclasses — 1ª edição', 'Interclasses — 2ª edição'],
+    foto: '/fotos-equipe/pyetra-pedroso.gremio.jpeg',
   },
   {
     nome: 'Juliana Florencio',
