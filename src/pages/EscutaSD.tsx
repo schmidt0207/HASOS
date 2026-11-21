@@ -172,8 +172,8 @@ export default function EscutaSD() {
                 {anonima ? (
                   <p className="flex gap-3 rounded-xl bg-lilas-claro p-4 text-sm leading-relaxed text-profundo" role="status">
                     <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-                    Sua mensagem será recebida sem identificação. Não pedimos nome nem turma e não guardamos dados
-                    que identifiquem você.
+                    Sua mensagem não incluirá nome nem turma. O serviço de hospedagem pode manter registros técnicos
+                    de acesso.
                   </p>
                 ) : (
                   <div className="grid gap-4 sm:grid-cols-2">
