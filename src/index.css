@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white font-sans text-tinta antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-roxo;
+    outline-style: solid;
+  }
+
+  .escuro :focus-visible {
+    @apply outline-lilas;
+  }
+
+  ::selection {
+    @apply bg-lilas text-noite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .botao {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .botao-claro {
+    @apply botao bg-white text-noite hover:bg-lilas-claro;
+  }
+
+  .botao-contorno-claro {
+    @apply botao border border-lilas/60 text-white hover:bg-white/10;
+  }
+
+  .botao-roxo {
+    @apply botao bg-profundo text-white hover:bg-roxo;
+  }
+
+  .botao-contorno {
+    @apply botao border border-profundo/25 text-profundo hover:bg-lilas-claro;
+  }
+
+  .cartao {
+    @apply rounded-2xl border border-lilas-claro bg-white shadow-suave;
+  }
+
+  .campo {
+    @apply w-full rounded-xl border border-lilas bg-white px-4 py-3 text-sm text-tinta placeholder:text-tinta/45 focus:border-roxo focus:outline-none focus:ring-2 focus:ring-roxo/25;
+  }
+
+  .rotulo {
+    @apply mb-1.5 block text-sm font-semibold text-profundo;
+  }
+
+  .secao {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+}
