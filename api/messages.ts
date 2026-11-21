@@ -5,6 +5,7 @@ import { exigirAdmin } from '../server/auth'
 const TIPOS = ['sugestao', 'reclamacao', 'denuncia', 'solicitacao', 'elogio', 'outro'] as const
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  res.setHeader('Cache-Control', 'no-store, private')
   try {
     const sql = banco()
     if (req.method === 'POST') {
