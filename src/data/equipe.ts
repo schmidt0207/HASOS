@@ -30,6 +30,7 @@ export const equipe: Integrante[] = [
     cargo: 'Segunda Secretária',
     descricao: 'Apoia a Secretaria e mantém os registros do Grêmio organizados.',
     projetos: [],
+    foto: '/fotos-equipe/sophia-gouveia.gremio.jpg',
   },
   {
     nome: 'Guilherme Schmidt',
