@@ -6,6 +6,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-
 const STATUS = ['nova', 'visualizada', 'em_analise', 'encaminhada', 'resolvida'] as const
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  res.setHeader('Cache-Control', 'no-store, private')
   if (!exigirAdmin(req, res)) return
   const id = req.query.id
   if (typeof id !== 'string' || !UUID.test(id)) return res.status(400).json({ erro: 'Identificador inválido.' })
