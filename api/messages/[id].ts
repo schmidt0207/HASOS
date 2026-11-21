@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { banco } from '../../server/db'
-import { exigirAdmin } from '../_lib/auth'
+import { exigirAdmin } from '../../server/auth'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const STATUS = ['nova', 'visualizada', 'em_analise', 'encaminhada', 'resolvida'] as const
