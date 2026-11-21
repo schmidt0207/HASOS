@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { CircleAlert, Eye, EyeOff, LoaderCircle, LogIn } from 'lucide-react'
 import StarMark from '../components/StarMark'
 import { useAuth } from '../context/AuthContext'
-import { supabaseConfigurado } from '../lib/supabase'
 
 export default function Login() {
   const { session, admin, carregando, entrar, sair } = useAuth()
@@ -40,12 +39,6 @@ export default function Login() {
           <h1 className="mt-4 text-4xl font-semibold text-profundo">Área do Grêmio</h1>
           <p className="mt-1 text-sm text-tinta/70">Acesso exclusivo para integrantes autorizados.</p>
         </div>
-
-        {!supabaseConfigurado && (
-          <p className="mt-6 rounded-xl bg-lilas-claro p-4 text-sm text-profundo" role="alert">
-            O Supabase ainda não foi configurado. Siga o README antes de usar o login.
-          </p>
-        )}
 
         {semPermissao && (
           <div className="mt-6 rounded-xl bg-red-50 p-4 text-sm text-red-800" role="alert">
@@ -105,7 +98,7 @@ export default function Login() {
             </p>
           )}
 
-          <button type="submit" disabled={enviando || !supabaseConfigurado} className="botao-roxo w-full">
+          <button type="submit" disabled={enviando} className="botao-roxo w-full">
             {enviando ? (
               <>
                 <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" />
