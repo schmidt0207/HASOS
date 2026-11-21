@@ -47,6 +47,7 @@ export const equipe: Integrante[] = [
     cargo: 'Diretora de Cultura',
     descricao: 'Planeja as ações culturais e artísticas do Grêmio.',
     projetos: ['Festival Respawn', 'Semana da Consciência Negra', 'Mostra Estudantil (em colaboração)'],
+    foto: '/fotos-equipe/khadyne-coelho.gremio.jpeg',
   },
   {
     nome: 'Pyetra Pedroso',
