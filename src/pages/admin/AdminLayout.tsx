@@ -3,7 +3,7 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { ExternalLink, Inbox, LayoutDashboard, LogOut } from 'lucide-react'
 import StarMark from '../../components/StarMark'
 import { useAuth } from '../../context/AuthContext'
-import { supabase } from '../../lib/supabase'
+import { requisicaoApi } from '../../lib/api'
 import type { Mensagem, Status } from '../../lib/types'
 
 export interface AdminCtx {
@@ -23,24 +23,16 @@ export default function AdminLayout() {
   const [erro, setErro] = useState<string | null>(null)
 
   const recarregar = useCallback(async () => {
-    if (!supabase) {
-      setErro('O Supabase não está configurado.')
-      setCarregando(false)
-      return
-    }
     setCarregando(true)
-    const { data, error } = await supabase
-      .from('mensagens')
-      .select('*')
-      .order('criado_em', { ascending: false })
-      .limit(2000)
-    if (error) {
-      setErro('Não foi possível carregar as mensagens. Verifique a conexão e as políticas do banco.')
-    } else {
+    try {
+      const { mensagens: recebidas } = await requisicaoApi<{ mensagens: Mensagem[] }>('/api/messages')
       setErro(null)
-      setMensagens((data ?? []) as Mensagem[])
+      setMensagens(recebidas)
+    } catch {
+      setErro('Não foi possível carregar as mensagens. Verifique a conexão e a configuração do servidor.')
+    } finally {
+      setCarregando(false)
     }
-    setCarregando(false)
   }, [])
 
   useEffect(() => {
@@ -48,30 +40,28 @@ export default function AdminLayout() {
   }, [recarregar])
 
   const alterarStatus = useCallback(async (id: string, status: Status): Promise<string | null> => {
-    if (!supabase) return 'Sem conexão com o banco de dados.'
-    const { data, error } = await supabase
-      .from('mensagens')
-      .update({ status })
-      .eq('id', id)
-      .select('id, status, visualizada_em')
-      .single()
-    if (error || !data) return 'Não foi possível atualizar o status.'
-    setMensagens((atual) =>
-      atual.map((m) =>
-        m.id === id
-          ? { ...m, status: data.status as Status, visualizada_em: data.visualizada_em as string | null }
-          : m,
-      ),
-    )
-    return null
+    try {
+      const { mensagem } = await requisicaoApi<{ mensagem: { status: Status; visualizada_em: string | null } }>(`/api/messages/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status }),
+      })
+      setMensagens((atual) =>
+        atual.map((m) => m.id === id ? { ...m, status: mensagem.status, visualizada_em: mensagem.visualizada_em } : m),
+      )
+      return null
+    } catch {
+      return 'Não foi possível atualizar o status.'
+    }
   }, [])
 
   const excluir = useCallback(async (id: string): Promise<string | null> => {
-    if (!supabase) return 'Sem conexão com o banco de dados.'
-    const { data, error } = await supabase.from('mensagens').delete().eq('id', id).select('id')
-    if (error || !data || data.length === 0) return 'Não foi possível excluir a mensagem.'
-    setMensagens((atual) => atual.filter((m) => m.id !== id))
-    return null
+    try {
+      await requisicaoApi(`/api/messages/${id}`, { method: 'DELETE' })
+      setMensagens((atual) => atual.filter((m) => m.id !== id))
+      return null
+    } catch {
+      return 'Não foi possível excluir a mensagem.'
+    }
   }, [])
 
   const novas = useMemo(() => mensagens.filter((m) => m.status === 'nova').length, [mensagens])
