@@ -9,11 +9,17 @@ function igualSeguro(entrada: string, esperado: string): boolean {
 }
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
+  res.setHeader('Cache-Control', 'no-store, private')
   if (req.method !== 'POST') return res.status(405).setHeader('Allow', 'POST').end()
   if (!credenciaisConfiguradas()) {
     return res.status(503).json({ erro: 'O login ainda não foi configurado na Vercel.' })
   }
-  const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
+  let body: any
+  try {
+    body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
+  } catch {
+    return res.status(400).json({ erro: 'Confira os dados de login.' })
+  }
   const usuario = typeof body?.usuario === 'string' ? body.usuario.trim() : ''
   const senha = typeof body?.senha === 'string' ? body.senha : ''
   const login = process.env.GREMIO_LOGIN!
