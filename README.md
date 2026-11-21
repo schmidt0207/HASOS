@@ -40,8 +40,29 @@ Copie `.env.example` para `.env.local` e preencha as variáveis com valores priv
 - O formulário público só pode criar mensagens. O servidor valida os campos e sempre define o status inicial como **nova**.
 - Só uma sessão autenticada pode listar, atualizar ou excluir mensagens.
 - O login e os dados do banco são processados por rotas da Vercel. `DATABASE_URL` nunca é incluída no código entregue ao navegador.
-- Mensagens anônimas não guardam nome nem turma. O conteúdo que a pessoa escrever ainda pode revelar sua identidade.
-- A Área do Grêmio não é um serviço de emergência; combine com a escola quem acompanha as mensagens e como encaminhar situações urgentes.
+- O painel usa uma conta compartilhada. Escolham uma senha longa, mantenham o acesso restrito à equipe autorizada e troquem a senha quando alguém sair.
+- Mensagens anônimas não guardam nome nem turma no banco. A hospedagem pode manter registros técnicos de acesso, e o texto escrito pode revelar a identidade da pessoa.
+- A Escuta SD não é um serviço de emergência e as mensagens não são lidas na hora. Combinem com a escola quem acompanha a caixa e o que fazer em situações urgentes. Em perigo imediato, procure um adulto de confiança ou ligue para 190 (Polícia), 192 (SAMU), 188 (CVV) ou 100 (Direitos Humanos).
+
+## Personalizar o conteúdo
+
+| O que mudar | Onde |
+| --- | --- |
+| Fotos e informações da equipe | `public/equipe/` e `src/data/equipe.ts` |
+| Propostas e calendário | `src/data/propostas.ts` |
+| Página inicial | `src/pages/Home.tsx` |
+| Logotipos e favicon | arquivos de imagem dentro de `public/` |
+| Cores e estilos | `tailwind.config.js` e `src/index.css` |
+
+Publique fotos de estudantes somente com autorização deles e dos responsáveis, quando forem menores.
+
+## Problemas comuns
+
+| Sintoma | O que conferir |
+| --- | --- |
+| O formulário não envia | Confirme que `DATABASE_URL` está ativa na Vercel e que `database/schema.sql` foi executado no Neon. |
+| O painel não aceita login | Confira `GREMIO_LOGIN`, `GREMIO_PASSWORD` e `SESSION_SECRET` nas variáveis da Vercel e faça redeploy. |
+| A caixa não carrega | Confira a variável `DATABASE_URL` e se o banco contém a tabela `mensagens`. |
 
 ## Publicação
 
