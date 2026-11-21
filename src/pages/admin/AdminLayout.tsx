@@ -41,7 +41,7 @@ export default function AdminLayout() {
 
   const alterarStatus = useCallback(async (id: string, status: Status): Promise<string | null> => {
     try {
-      const { mensagem } = await requisicaoApi<{ mensagem: { status: Status; visualizada_em: string | null } }>(`/api/messages/${id}`, {
+      const { mensagem } = await requisicaoApi<{ mensagem: { status: Status; visualizada_em: string | null } }>(`/api/messages?id=${encodeURIComponent(id)}`, {
         method: 'PATCH',
         body: JSON.stringify({ status }),
       })
@@ -56,7 +56,7 @@ export default function AdminLayout() {
 
   const excluir = useCallback(async (id: string): Promise<string | null> => {
     try {
-      await requisicaoApi(`/api/messages/${id}`, { method: 'DELETE' })
+      await requisicaoApi(`/api/messages?id=${encodeURIComponent(id)}`, { method: 'DELETE' })
       setMensagens((atual) => atual.filter((m) => m.id !== id))
       return null
     } catch (erro) {
