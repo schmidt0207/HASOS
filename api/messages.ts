@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { banco } from './_lib/db'
+import { banco } from '../server/db'
 import { exigirAdmin } from './_lib/auth'
 
 const TIPOS = ['sugestao', 'reclamacao', 'denuncia', 'solicitacao', 'elogio', 'outro'] as const
