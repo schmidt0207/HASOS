@@ -58,6 +58,7 @@ export const equipe: Integrante[] = [
     cargo: 'Diretora de Comunicação',
     descricao: 'Gerencia comunicados, divulgação, registros e transparência.',
     projetos: ['Jornal Escolar — Vozes do Santos Dumont', 'Rádio Escolar — Frequência Estudantil'],
+    foto: '/fotos-equipe/juliana-florencio.gremio.jpeg',
   },
   {
     nome: 'Maria Alice',
