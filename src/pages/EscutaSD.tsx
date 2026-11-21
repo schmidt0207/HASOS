@@ -98,13 +98,7 @@ export default function EscutaSD() {
               </div>
             ) : (
               <form onSubmit={enviar} noValidate className="space-y-7">
-                {!supabaseConfigurado && (
-                  <p className="rounded-xl bg-lilas-claro p-4 text-sm text-profundo" role="alert">
-                    O banco de dados ainda não foi conectado. Siga o README para configurar o Supabase.
-                  </p>
-                )}
-
-                <fieldset>
+<fieldset>
                   <legend className="rotulo">Tipo de manifestação</legend>
                   <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
                     {TIPOS.map((t) => (
