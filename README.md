@@ -14,7 +14,7 @@ Portal institucional da Chapa HASOS com páginas públicas, Escuta SD e Área do
    | `GREMIO_PASSWORD` | Uma senha longa e exclusiva, compartilhada somente com a equipe autorizada |
    | `SESSION_SECRET` | Chave aleatória privada com pelo menos 32 caracteres |
 
-   A integração Neon fornece `DATABASE_URL`. Mantenha todas essas variáveis como **Sensitive** e nunca as coloque em arquivos do site ou no GitHub.
+   A integração Neon fornece `DATABASE_URL`. Mantenha os valores privados; nunca os coloque no código do site ou no GitHub.
 
 4. Abra **Deployments** e faça redeploy do projeto para carregar as variáveis.
 5. Acesse `/area-do-gremio` e entre com o usuário e senha configurados.
@@ -25,7 +25,7 @@ Para gerar um valor aleatório para `SESSION_SECRET`, no Windows PowerShell exec
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-O login usa uma conta compartilhada definida na Vercel. A sessão fica em cookie protegido, expira após 8 horas e pode ser encerrada pelo botão **Sair**. A senha e a chave de sessão nunca são enviadas ao navegador. Se trocar a senha ou a chave, faça redeploy; trocar a chave também encerra as sessões atuais.
+O login usa uma conta compartilhada definida na Vercel. A sessão fica em cookie protegido, expira após 8 horas e pode ser encerrada pelo botão **Sair**. A senha e a chave de sessão nunca são enviadas ao navegador. Após alterar uma variável, faça redeploy. Trocar a chave de sessão encerra as sessões atuais; sessões existentes podem continuar válidas por até 8 horas após a troca da senha.
 
 ## Desenvolvimento local
 
@@ -33,7 +33,7 @@ O login usa uma conta compartilhada definida na Vercel. A sessão fica em cookie
 npm install
 ```
 
-Copie `.env.example` para `.env.local` e preencha as variáveis com valores privados. Para rodar a interface e as funções de servidor localmente, use a Vercel CLI com `vercel dev`; o servidor Vite simples (`npm run dev`) serve apenas a interface e não executa as rotas `/api`.
+Copie `.env.example` para `.env.local` e preencha as variáveis com valores privados. No Windows PowerShell, use `Copy-Item .env.example .env.local`. Para rodar a interface e as funções de servidor localmente, instale a Vercel CLI e execute `vercel dev`; o servidor Vite simples (`npm run dev`) serve apenas a interface e não executa as rotas `/api`.
 
 ## Como os dados são protegidos
 
