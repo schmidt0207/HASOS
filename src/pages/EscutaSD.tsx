@@ -254,7 +254,7 @@ export default function EscutaSD() {
                 <li>As mensagens não aparecem publicamente. Só os integrantes autorizados do Grêmio têm acesso, por meio de login.</li>
                 <li>Usamos o conteúdo apenas para ler, analisar e encaminhar sua manifestação aos responsáveis pela gestão escolar.</li>
                 <li>No envio anônimo não guardamos nome nem turma. No envio identificado guardamos o nome e a turma que você informar.</li>
-                <li>Mesmo no envio anônimo, o que você escrever na mensagem pode revelar quem é você. Evite incluir dados pessoais se quiser ficar anônimo.</li>
+                <li>Mesmo no envio anônimo, registros técnicos do serviço ou o que você escrever podem revelar sua identidade. Evite incluir dados pessoais se quiser preservar sua privacidade.</li>
                 <li>As informações podem ser compartilhadas com a direção quando necessário para resolver a situação.</li>
               </ul>
             </div>
