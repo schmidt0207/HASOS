@@ -1,10 +1,9 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import type { Session } from '@supabase/supabase-js'
-import { supabase } from '../lib/supabase'
+import { requisicaoApi } from '../lib/api'
 
 interface AuthEstado {
   carregando: boolean
-  session: Session | null
+  session: { user: { email: string } } | null
   admin: boolean | null
   entrar: (identificador: string, senha: string) => Promise<string | null>
   sair: () => Promise<void>
@@ -12,93 +11,53 @@ interface AuthEstado {
 
 const AuthContext = createContext<AuthEstado | null>(null)
 
-const DOMINIO_LOGIN = import.meta.env.VITE_LOGIN_DOMINIO || 'hasos.example.com'
-
-function paraEmail(identificador: string): string {
-  const valor = identificador.trim().toLowerCase()
-  return valor.includes('@') ? valor : `${valor}@${DOMINIO_LOGIN}`
-}
-
-async function verificarAdmin(userId: string): Promise<boolean> {
-  if (!supabase) return false
-  const { data, error } = await supabase
-    .from('admins')
-    .select('user_id')
-    .eq('user_id', userId)
-    .maybeSingle()
-  return !error && Boolean(data)
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [carregando, setCarregando] = useState(true)
-  const [session, setSession] = useState<Session | null>(null)
+  const [session, setSession] = useState<AuthEstado['session']>(null)
   const [admin, setAdmin] = useState<boolean | null>(null)
 
   useEffect(() => {
-    if (!supabase) {
-      setCarregando(false)
-      return
-    }
-    const cliente = supabase
     let ativo = true
-
-    cliente.auth.getSession().then(async ({ data }) => {
-      if (!ativo) return
-      const atual = data.session
-      setSession(atual)
-      if (atual) {
-        const ok = await verificarAdmin(atual.user.id)
-        if (ativo) setAdmin(ok)
-      } else {
-        setAdmin(false)
-      }
-      if (ativo) setCarregando(false)
-    })
-
-    const { data: assinatura } = cliente.auth.onAuthStateChange((_evento, nova) => {
-      setSession(nova)
-      if (!nova) {
-        setAdmin(false)
-        return
-      }
-      setAdmin(null)
-      setTimeout(() => {
-        verificarAdmin(nova.user.id).then((ok) => {
-          if (ativo) setAdmin(ok)
-        })
-      }, 0)
-    })
-
-    return () => {
-      ativo = false
-      assinatura.subscription.unsubscribe()
-    }
+    requisicaoApi<{ usuario: string }>('/api/auth/session')
+      .then(({ usuario }) => {
+        if (ativo) {
+          setSession({ user: { email: usuario } })
+          setAdmin(true)
+        }
+      })
+      .catch(() => {
+        if (ativo) {
+          setSession(null)
+          setAdmin(false)
+        }
+      })
+      .finally(() => {
+        if (ativo) setCarregando(false)
+      })
+    return () => { ativo = false }
   }, [])
 
   async function entrar(identificador: string, senha: string): Promise<string | null> {
-    if (!supabase) return 'O sistema ainda não foi configurado. Verifique as variáveis do Supabase.'
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: paraEmail(identificador),
-      password: senha,
-    })
-    if (error || !data.user) {
-      if (error && error.status === 400) return 'Usuário ou senha incorretos.'
-      return 'Não foi possível entrar agora. Verifique sua conexão e tente de novo.'
+    try {
+      const { usuario } = await requisicaoApi<{ usuario: string }>('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ usuario: identificador, senha }),
+      })
+      setSession({ user: { email: usuario } })
+      setAdmin(true)
+      return null
+    } catch (erro) {
+      return erro instanceof Error ? erro.message : 'Não foi possível entrar agora. Verifique sua conexão e tente de novo.'
     }
-    const ok = await verificarAdmin(data.user.id)
-    if (!ok) {
-      await supabase.auth.signOut()
-      return 'Este usuário não tem permissão para acessar a Área do Grêmio.'
-    }
-    setSession(data.session)
-    setAdmin(true)
-    return null
   }
 
   async function sair() {
-    if (supabase) await supabase.auth.signOut()
-    setSession(null)
-    setAdmin(false)
+    try {
+      await requisicaoApi('/api/auth/logout', { method: 'POST' })
+    } finally {
+      setSession(null)
+      setAdmin(false)
+    }
   }
 
   return (

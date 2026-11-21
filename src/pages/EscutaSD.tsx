@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { CircleAlert, CircleCheck, LoaderCircle, Lock, Send, ShieldCheck, UserRound, UserX } from 'lucide-react'
 import CabecalhoPagina from '../components/CabecalhoPagina'
-import { supabase, supabaseConfigurado } from '../lib/supabase'
+import { requisicaoApi } from '../lib/api'
 import { ROTULO_TIPO, TIPOS, type TipoManifestacao } from '../lib/types'
 
 const LIMITE = 3000
@@ -53,23 +53,23 @@ export default function EscutaSD() {
       return
     }
 
-    if (!supabase) {
-      return setErro('O envio ainda não está disponível. Avise o Grêmio pessoalmente.')
-    }
-
     setEnviando(true)
-    const { error } = await supabase.from('mensagens').insert({
-      tipo,
-      conteudo: texto,
-      anonima,
-      nome: anonima ? null : nome.trim(),
-      turma: anonima ? null : turma.trim(),
-    })
-    setEnviando(false)
-
-    if (error) {
+    try {
+      await requisicaoApi('/api/messages', {
+        method: 'POST',
+        body: JSON.stringify({
+          tipo,
+          conteudo: texto,
+          anonima,
+          nome: anonima ? null : nome.trim(),
+          turma: anonima ? null : turma.trim(),
+        }),
+      })
+    } catch {
+      setEnviando(false)
       return setErro('Não foi possível enviar agora. Confira sua conexão e tente de novo em instantes.')
     }
+    setEnviando(false)
 
     limpar()
     setEnviado(true)
@@ -98,13 +98,7 @@ export default function EscutaSD() {
               </div>
             ) : (
               <form onSubmit={enviar} noValidate className="space-y-7">
-                {!supabaseConfigurado && (
-                  <p className="rounded-xl bg-lilas-claro p-4 text-sm text-profundo" role="alert">
-                    O banco de dados ainda não foi conectado. Siga o README para configurar o Supabase.
-                  </p>
-                )}
-
-                <fieldset>
+<fieldset>
                   <legend className="rotulo">Tipo de manifestação</legend>
                   <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
                     {TIPOS.map((t) => (
@@ -260,7 +254,7 @@ export default function EscutaSD() {
                 <li>As mensagens não aparecem publicamente. Só os integrantes autorizados do Grêmio têm acesso, por meio de login.</li>
                 <li>Usamos o conteúdo apenas para ler, analisar e encaminhar sua manifestação aos responsáveis pela gestão escolar.</li>
                 <li>No envio anônimo não guardamos nome nem turma. No envio identificado guardamos o nome e a turma que você informar.</li>
-                <li>Mesmo no envio anônimo, o que você escrever na mensagem pode revelar quem é você. Evite incluir dados pessoais se quiser ficar anônimo.</li>
+                <li>Mesmo no envio anônimo, registros técnicos do serviço ou o que você escrever podem revelar sua identidade. Evite incluir dados pessoais se quiser preservar sua privacidade.</li>
                 <li>As informações podem ser compartilhadas com a direção quando necessário para resolver a situação.</li>
               </ul>
             </div>
