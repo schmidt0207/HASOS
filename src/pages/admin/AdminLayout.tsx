@@ -49,8 +49,8 @@ export default function AdminLayout() {
         atual.map((m) => m.id === id ? { ...m, status: mensagem.status, visualizada_em: mensagem.visualizada_em } : m),
       )
       return null
-    } catch {
-      return 'Não foi possível atualizar o status.'
+    } catch (erro) {
+      return erro instanceof Error ? erro.message : 'Não foi possível atualizar o status.'
     }
   }, [])
 
@@ -59,8 +59,8 @@ export default function AdminLayout() {
       await requisicaoApi(`/api/messages/${id}`, { method: 'DELETE' })
       setMensagens((atual) => atual.filter((m) => m.id !== id))
       return null
-    } catch {
-      return 'Não foi possível excluir a mensagem.'
+    } catch (erro) {
+      return erro instanceof Error ? erro.message : 'Não foi possível excluir a mensagem.'
     }
   }, [])
 
