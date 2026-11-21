@@ -19,12 +19,14 @@ export const equipe: Integrante[] = [
     cargo: 'Vice-presidente',
     descricao: 'Apoia a Presidência e a substitui quando necessário, conforme o Estatuto.',
     projetos: [],
+    foto: '/fotos-equipe/emili-baron.gremio.jpeg',
   },
   {
     nome: 'Ellen Rodrigues',
     cargo: 'Secretária-Geral',
     descricao: 'Registra atas e organiza documentos, correspondências, pautas e relatórios.',
     projetos: [],
+    foto: '/fotos-equipe/ellen-rodrigues.gremio.jpeg',
   },
   {
     nome: 'Sophia Gouveia',
