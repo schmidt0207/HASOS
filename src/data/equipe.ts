@@ -38,6 +38,7 @@ export const equipe: Integrante[] = [
     cargo: 'Tesoureiro',
     descricao: 'Controla receitas e despesas, guarda comprovantes e apresenta as prestações de contas.',
     projetos: ['Campanhas de arrecadação e rifas'],
+    foto: '/fotos-equipe/guilherme-schmidt.gremio.jpeg',
   },
   {
     nome: 'Khadyne Coelho',
@@ -63,5 +64,6 @@ export const equipe: Integrante[] = [
     cargo: 'Diretora de Projetos',
     descricao: 'Coordena os projetos educacionais e a Mostra Estudantil.',
     projetos: ['Mostra Estudantil: Feira de Artes + Ciências', 'Semana da Consciência Negra (em parceria)'],
+    foto: '/fotos-equipe/maria-alice.gremio.jpeg',
   },
 ]
