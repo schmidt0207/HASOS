@@ -1,6 +1,6 @@
 import { timingSafeEqual } from 'node:crypto'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { criarCookie, credenciaisConfiguradas } from '../_lib/auth'
+import { criarCookie, credenciaisConfiguradas } from '../../server/auth'
 
 function igualSeguro(entrada: string, esperado: string): boolean {
   const a = Buffer.from(entrada)
