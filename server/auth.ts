@@ -58,6 +58,10 @@ export function usuarioDaSessao(req: VercelRequest): string | null {
 }
 
 export function exigirAdmin(req: VercelRequest, res: VercelResponse): string | null {
+  if (!credenciaisConfiguradas()) {
+    res.status(503).json({ erro: 'O login ainda não foi configurado na Vercel.' })
+    return null
+  }
   const usuario = usuarioDaSessao(req)
   if (!usuario) res.status(401).json({ erro: 'A sessão terminou. Entre novamente.' })
   return usuario
