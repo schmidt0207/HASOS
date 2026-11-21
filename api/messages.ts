@@ -6,6 +6,10 @@ const TIPOS = ['sugestao', 'reclamacao', 'denuncia', 'solicitacao', 'elogio', 'o
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Cache-Control', 'no-store, private')
+  if (req.method !== 'POST' && req.method !== 'GET') {
+    return res.status(405).setHeader('Allow', 'GET, POST').end()
+  }
+  if (req.method === 'GET' && !exigirAdmin(req, res)) return
   try {
     const sql = banco()
     if (req.method === 'POST') {
@@ -27,7 +31,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(201).json({ id: rows[0].id })
     }
     if (req.method === 'GET') {
-      if (!exigirAdmin(req, res)) return
       const rows = await sql`select id, tipo, conteudo, anonima, nome, turma, status, criado_em, visualizada_em
         from mensagens order by criado_em desc limit 2000`
       return res.status(200).json({ mensagens: rows })
