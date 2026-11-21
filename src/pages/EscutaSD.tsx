@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { CircleAlert, CircleCheck, LoaderCircle, Lock, Send, ShieldCheck, UserRound, UserX } from 'lucide-react'
 import CabecalhoPagina from '../components/CabecalhoPagina'
-import { supabase, supabaseConfigurado } from '../lib/supabase'
+import { requisicaoApi } from '../lib/api'
 import { ROTULO_TIPO, TIPOS, type TipoManifestacao } from '../lib/types'
 
 const LIMITE = 3000
@@ -53,23 +53,23 @@ export default function EscutaSD() {
       return
     }
 
-    if (!supabase) {
-      return setErro('O envio ainda não está disponível. Avise o Grêmio pessoalmente.')
-    }
-
     setEnviando(true)
-    const { error } = await supabase.from('mensagens').insert({
-      tipo,
-      conteudo: texto,
-      anonima,
-      nome: anonima ? null : nome.trim(),
-      turma: anonima ? null : turma.trim(),
-    })
-    setEnviando(false)
-
-    if (error) {
+    try {
+      await requisicaoApi('/api/messages', {
+        method: 'POST',
+        body: JSON.stringify({
+          tipo,
+          conteudo: texto,
+          anonima,
+          nome: anonima ? null : nome.trim(),
+          turma: anonima ? null : turma.trim(),
+        }),
+      })
+    } catch {
+      setEnviando(false)
       return setErro('Não foi possível enviar agora. Confira sua conexão e tente de novo em instantes.')
     }
+    setEnviando(false)
 
     limpar()
     setEnviado(true)
