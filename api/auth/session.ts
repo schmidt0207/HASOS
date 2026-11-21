@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { credenciaisConfiguradas, usuarioDaSessao } from '../../server/auth'
+import { credenciaisConfiguradas, usuarioDaSessao } from '../../server/auth.js'
 
 export default function handler(_req: VercelRequest, res: VercelResponse) {
   res.setHeader('Cache-Control', 'no-store, private')

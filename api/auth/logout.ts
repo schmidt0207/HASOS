@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { apagarCookie } from '../../server/auth'
+import { apagarCookie } from '../../server/auth.js'
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Cache-Control', 'no-store, private')
