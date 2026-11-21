@@ -1,7 +1,3 @@
-export interface UsuarioSessao {
-  email: string
-}
-
 export async function requisicaoApi<T>(caminho: string, opcoes: RequestInit = {}): Promise<T> {
   const headers = new Headers(opcoes.headers)
   if (!headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
